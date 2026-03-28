@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container" style="max-width: 800px; padding: 0; background: transparent; box-shadow: none;">
+    <h2 style="margin-bottom: 2rem; font-size: 2rem; color: var(--text-main);">My Orders</h2>
+
+    {% if orders %}
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {% for order in orders %}
+            <div class="card" style="padding: 1.5rem; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 0.25rem;">Order #{{ order.order_number }}</h3>
+                        <p class="card-text" style="font-size: 0.875rem; margin-bottom: 0;">Placed on {{ order.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; 
+                            {% if order.status == 'Pending' %}background: #FEF3C7; color: #92400E;
+                            {% elif order.status == 'Completed' %}background: #D1FAE5; color: #065F46;
+                            {% else %}background: #FEE2E2; color: #991B1B;{% endif %}
+                        ">
+                            {{ order.status }}
+                        </span>
+                        <div style="font-weight: 700; margin-top: 0.5rem; font-size: 1.125rem;">
+                            ${{ order.total_price }}
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="table" style="margin-bottom: 0; box-shadow: none; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <thead>
+                        <tr>
+                            <th style="background-color: var(--bg-color);">Product</th>
+                            <th style="background-color: var(--bg-color); text-align: center;">Qty</th>
+                            <th style="background-color: var(--bg-color); text-align: right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.items.all %}
+                        <tr>
+                            <td>
+                                {% if item.product %}
+                                    <a href="{% url 'product_detail' item.product.id %}" style="font-weight: 500;">
+                                        {{ item.product.name }}
+                                    </a>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-style: italic;">Product unavailable</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: center;">{{ item.quantity }}</td>
+                            <td style="text-align: right;">${{ item.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16" style="color: var(--text-muted); margin-bottom: 1rem;">
+                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM2.383 4.6l-1.07.427V12.7l4.187 1.675v-8.15L2.383 4.6z"/>
+            </svg>
+            <h3 style="margin-bottom: 1rem; color: var(--text-main);">You have no orders yet</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">When you place orders, they will appear here.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

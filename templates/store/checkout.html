@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem;">Checkout</h1>
+
+<div class="grid" style="grid-template-columns: 2fr 1fr;">
+    <!-- Order Summary -->
+    <div>
+        <div class="card" style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Order Summary</h2>
+            <table class="table" style="box-shadow: none; border: 1px solid var(--border-color);">
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.quantity }}x {{ item.product.name }}</td>
+                        <td style="text-align: right; font-weight: 600;">${{ item.get_total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th style="background-color: transparent;">Grand Total</th>
+                        <th style="background-color: transparent; text-align: right; font-size: 1.25rem; color: var(--primary);">${{ total }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Payment action -->
+    <div>
+        <div class="card" style="padding: 2rem; background: var(--bg-color); border: 1px solid var(--border-color);">
+            <h3 style="margin-bottom: 1rem;">Confirm Order</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">By clicking below, you confirm your order of <strong style="color: var(--text-main);">${{ total }}</strong>.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.125rem;">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

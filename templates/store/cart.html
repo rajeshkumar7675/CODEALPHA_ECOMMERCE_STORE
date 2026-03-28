@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-main);">Shopping Cart</h1>
+
+{% if items %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>
+                <div style="font-weight: 600; color: var(--text-main);">{{ item.product.name }}</div>
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.product.price }}</td>
+            <td style="font-weight: 600;">${{ item.get_total_price }}</td>
+            <td>
+                <a href="{% url 'remove_from_cart' item.pk %}" class="btn btn-danger" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="total-section">
+    <h3>Total: <span style="color: var(--primary);">${{ total }}</span></h3>
+    <a href="{% url 'checkout' %}" class="btn btn-primary" style="font-size: 1.125rem; padding: 0.75rem 2rem;">Proceed to Checkout</a>
+    <a href="{% url 'home' %}" class="btn" style="color: var(--text-muted); margin-left:1rem;">Continue Shopping</a>
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 4rem 2rem;">
+    <h3 style="margin-bottom: 1rem; color: var(--text-muted);">Your cart is empty.</h3>
+    <a href="{% url 'home' %}" class="btn btn-primary">Start Shopping</a>
+</div>
+{% endif %}
+{% endblock %}
