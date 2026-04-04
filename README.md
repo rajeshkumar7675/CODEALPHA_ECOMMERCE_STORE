@@ -1,1 +1,1 @@
-# CODEALPHA_ECOMMERCE_STORE
+A full-stack eCommerce web application built using Django, HTML, CSS, and JavaScript. It includes features like user authentication, product catalog, shopping cart, and order management, showcasing practical implementation of backend and frontend integration.
